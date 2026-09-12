@@ -1,0 +1,17 @@
+/* Style only the truly active tab */
+.custom-tabs .nav-link{
+    color:black;
+}
+
+.custom-tabs .nav-link.active {
+    background-color: #0d6efd;
+    color: #fff;
+}
+
+.nav{
+    border-bottom: solid 1px gray;
+}
+
+.error{
+    color:'red';
+}

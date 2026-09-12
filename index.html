@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>admin.rental-fleet.com</title>
+    
+    <link href="/public/assets/bootstrap-5.3.8-dist/css/bootstrap.min.css" rel="stylesheet" >
+    <script src="/public/assets/bootstrap-5.3.8-dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="/public/js/dashboard.js" type="module" defer></script>
+    <link href="/public/css/dashboard.css" rel="stylesheet" />
+
+  </head>
+  <body>
+    
+    <header>
+      <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+        <div class="container-fluid">
+            <span class="text-white fs-3">admin.rental-fleet.com</span>
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarCollapse"
+              aria-controls="navbarCollapse"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarCollapse">
+            
+              <ul class="navbar-nav me-auto mb-2 mb-md-0 "></ul>
+            
+              <form class="d-flex" role="search">
+                  <input
+                  class="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  />
+                  <button class="btn btn-outline-success" type="submit">
+                  Search
+                  </button>
+              </form>
+            
+          </div>
+        </div>
+    </nav>
+    </header>
+    
+    <main>
+      
+      <ul class="nav nav-tabs custom-tabs mt-3" id="myTab" role="tablist">
+
+        <!--dashboard-->
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Dashboard</button>
+        </li>
+
+        <!--truck-->
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="truck-tab" data-bs-toggle="tab" data-bs-target="#truck" type="button" role="tab" aria-controls="truck">Truck</button>
+        </li>
+
+        <!--product-->
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="product-tab" data-bs-toggle="tab" data-bs-target="#product" type="button" role="tab" aria-controls="product">Product</button>
+        </li>
+
+        <!--profile-->
+        <li class="nav-item" role="presentation">
+          <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile">Profile</button>
+        </li>            
+
+      </ul>
+
+
+      <div class="tab-content p-5" id="myTabContent">
+        
+        
+        <!--dashboard panel-->
+        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+         
+          <p>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam dictum, sapien non viverra ullamcorper, diam mi mollis eros, a tempus lorem ligula a purus. 
+          </p>
+
+          <p>
+          Curabitur a nisi at sapien commodo malesuada. Integer quis blandit orci. Phasellus cursus gravida lorem nec viverra. Nunc lacus nulla, congue nec tincidunt sit amet, consequat sed nulla. 
+          Aenean fermentum libero in dui tristique fringilla. Nunc fringilla consequat enim id efficitur. Mauris elementum at purus ut rhoncus. In dictum massa lectus, lacinia semper ex ultrices vitae.
+          </p>
+         
+        </div>
+        <!--dashboard panel-->
+
+
+        <!--truck panel-->
+        <div class="tab-pane fade" id="truck" role="tabpanel" aria-labelledby="truck-tab">
+         
+          <!--title-->
+          <h6 class="border-bottom pb-2 mb-2">Ford 2000</h6>
+
+          <!--card-->
+          <div class="d-flex text-muted pb-3">
+            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
+
+            <p class="pb-3 mb-0 small lh-sm border-bottom">
+              <strong class="d-block text-gray-dark">@username</strong>
+              Some representative placeholder content, with some information about this user. Imagine this being some sort of status update, perhaps formation about this user. Imagine this being some sort of status update, perhaps formation about this user. Imagine this being some sort of status update, perhaps?
+            </p>
+          </div>
+
+          <!--card-->
+          <div class="d-flex text-muted pb-3">
+            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
+
+            <p class="pb-3 mb-0 small lh-sm border-bottom">
+              <strong class="d-block text-gray-dark">@username</strong>
+              Some representative placeholder content, with some information about this user. Imagine this being some sort of status update, perhaps formation about this user. Imagine this being some sort of status update, perhaps formation about this user. Imagine this being some sort of status update, perhaps?
+            </p>
+          </div>
+
+          <!--card-->
+          <div class="d-flex text-muted pb-3">
+            <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 32x32" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#007bff"></rect><text x="50%" y="50%" fill="#007bff" dy=".3em">32x32</text></svg>
+
+            <p class="pb-3 mb-0 small lh-sm border-bottom">
+              <strong class="d-block text-gray-dark">@username</strong>
+              Some representative placeholder content, with some information about this user. Imagine this being some sort of status update, perhaps formation about this user. Imagine this being some sort of status update, perhaps formation about this user. Imagine this being some sort of status update, perhaps?
+            </p>
+          </div>
+
+        </div>
+        <!--truck panel-->      
+
+
+        <!--product panel-->
+        <div class="tab-pane fade" id="product" role="tabpanel" aria-labelledby="product-tab">
+                   
+          none
+
+          <div id="product-message" class="my-5"></div>
+
+        </div>
+        <!--product panel-->
+
+        
+        <!--profile panel-->
+        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+         
+          <div id="login-form-container" class="col-md-2">
+            
+            <form id="login-form" method="post" novalidate>
+
+              <div class="mb-3">
+                  <label for="email" class="form-label"><span class="text-danger">* </span>Email</label>
+                  <input name="email" type="email" class="form-control" id="email" aria-describedby="emailHelp" value="" autofocus>
+                  <div id="emailHelp" class="form-text text-danger"></div>
+              </div>
+
+              <div class="mb-3">
+                  <label for="password" class="form-label"><span class="text-danger">* </span>Password</label>
+                  <input name="password" type="password" class="form-control" id="empasswordail" aria-describedby="passwordHelp">
+                  <div id="passwordHelp" class="form-text text-danger"></div>
+              </div>
+              
+              <div class="py-3 text-danger">* Required Fields</div>
+
+              <button type="submit" class="btn btn-primary">Submit</button>
+
+            </form>
+
+            <div id="global-message" class="my-5"></div>
+            
+          </div>
+
+          <button id="logout-button" class="">Logout</button>
+          
+        </div>
+        <!--profile panel-->
+
+        
+      </div>
+
+    </main>     
+
+  </body>
+</html>
