@@ -15,3 +15,7 @@
 .error{
     color:'red';
 }
+
+.errored-field{
+    border: 1px solid red;
+}

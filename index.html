@@ -140,10 +140,44 @@
 
         <!--product panel-->
         <div class="tab-pane fade" id="product" role="tabpanel" aria-labelledby="product-tab">
-                   
-          none
+            
+            <!-- Formulaire de création de produit -->
+            <div id="product-form-container" class="col-md-2">
+                
+                <form id="product-form" method="post">
 
-          <div id="product-message" class="my-5"></div>
+                    <div class="mb-3">
+                        <label for="name" class="form-label"><span class="text-danger">* </span>Name</label>
+                        <input name="name" type="text" class="form-control" id="name" aria-describedby="nameHelp" value="" required autofocus>
+                        <div id="nameHelp" class="form-text text-danger"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="picture" class="form-label"><span class="text-danger">* </span>Picture</label>
+                        <input name="picture" type="file" class="form-control" id="picture" aria-describedby="pictureHelp" required>
+                        <div id="pictureHelp" class="form-text text-danger"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="price" class="form-label"><span class="text-danger">* </span>Price</label>
+                        <input name="price" type="name" class="form-control" id="price" aria-describedby="priceHelp" value="" required>
+                        <div id="priceHelp" class="form-text text-danger"></div>
+                    </div>
+                    
+                    <div class="py-3 text-danger">* Required Fields</div>
+
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="reset" class="btn btn-warning mx-2">Empty</button>
+
+                </form>
+
+                <div id="global-message" class="text-success my-5"></div>
+            
+            </div>  
+            <!-- Fin formulaire de création de produit -->
+
+            <!-- Liste des produits -->
+            <div id="product-list"></div>
 
         </div>
         <!--product panel-->

@@ -1,5 +1,5 @@
-import selectTab from "./tools.js";
-import { ROUTES, HOST } from "./constants.js";
+import { selectTab } from "./tools.js";
+import ProductTab from "./product-tab.js";
 
 //=== Bind Events ===
 
@@ -90,27 +90,10 @@ async function truckTab(){
     console.log('truckTab');
 }
 
-async function productTab(){
-    const tab = document.querySelector('#product')
-
-    console.log('products new')
-    
-    tab.replaceChildren()
-
-    const productLine = (index, infos) => {
-        const p = document.createElement("p")
-        p.textContent = `${index}. ${infos.map((v) => v).join(', ')}`
-        return p
-    };
-
-    const response = await fetch(`${HOST}${ROUTES.products}`)
-    
-    if (!response.ok)
-        document.querySelector('#product-message').textContent = `Erreur: [${response.status}] les produits sont injoignables.`           
-
-    const data = await response.json()
-
-    data.forEach((p, i) => tab.appendChild(productLine(i + 1, Object.keys(p).filter(k => k !== 'id').map(k => p[k]))))    
+async function productTab() {
+    console.log("Product tab my list")
+    ProductTab.createProductSubmitBindEvent()
+    await ProductTab.loadList()    
 }
 
 async function profileTab(){
