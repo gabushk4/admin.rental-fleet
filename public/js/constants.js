@@ -1,17 +1,22 @@
 export const HOST = 'http://local.api.rental-fleet.com'
+export const API_CDN = 'http://local.cdn.rental-fleet.com/'
 export const API_KEY = 'api_sk_dev_DHkq1I8IHoBZm0QFiPcQm9fUszLEjd5mHsGxoTaH2F0'
 
 export const METHOD = Object.freeze({
     get : 'GET',
     post : 'POST',
-    delete : 'DELETE'
+    delete: 'DELETE',
+    update: 'PUT',
+    modify: 'PATCH'
 });
 
 export const ROUTES = Object.freeze({
     products: '/products',
     getProducts : { route : '/products', method : METHOD.get },
     createProduct : { route : '/products', method : METHOD.post },
-    deleteProduct : { route : '/products', method : METHOD.delete, },
+    deleteProduct: { route: '/products/', method: METHOD.delete, },
+    updateProduct: { route: '/products/', method: METHOD.update },
+    modifyProduct: { route: '/products/', method: METHOD.modify },
 })
 
 export const HEADER = Object.freeze({
@@ -30,7 +35,9 @@ export const HTTP_STATUS = Object.freeze({
     OK : 200,
     Created : 201,
     NoContent : 204,
-    BadRequest : 400,
+    BadRequest: 400,
+    Forbidden: 403, 
+    Unauthorized: 401,     
     NotFound : 404, 
     MethodNotAllowed : 405,
     Conflict: 409,
@@ -52,8 +59,9 @@ export const TEXT = Object.freeze({
     productSaved : 'The product has been saved',
     productNotExists : 'The product does not exists',
     productDeleted: 'The product has been deleted',
-    ServiceUnavailable: 'Server is unavailable'
-    
+    ServiceUnavailable: 'Server is unavailable',
+    Forbidden: 'You are not allowed to perform this action',
+    Unauthorized: 'You are not authorized to perform this action',
 });
 
 export const PRODUCT = Object.freeze({

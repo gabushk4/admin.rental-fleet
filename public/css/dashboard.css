@@ -19,3 +19,18 @@
 .errored-field{
     border: 1px solid red;
 }
+
+#product img {
+    max-width: 50px;
+    height: auto;
+    position: relative;
+    border: solid 1px black;
+    scale: 1;
+    transition: scale 0.3s ease-in-out;
+    transform-origin: bottom left;
+}
+
+#product imghover {
+    scale: 5;    
+    z-index: 1;
+}

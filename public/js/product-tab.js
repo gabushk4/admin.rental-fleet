@@ -44,7 +44,7 @@ const ProductTab = {
         
             if (!response.ok) {
 
-                throw new Error(`Statut de réponse : ${response.status}`);
+                throw new Error(`Statut de réponse : ${reponse.status}`);
 
             }
 
@@ -53,11 +53,16 @@ const ProductTab = {
             if (!data) return;
 
             // À partir d'ici l'affichage change comparé à myList()
-           
+        
             data.forEach(product => {
-                
+                console.log("product", product)
                 const form = document.createElement('form');
                 form.classList.add('d-inline-block', 'm-2');
+                
+                const thumb = document.createElement('img');
+                thumb.name = 'thumb';
+                thumb.classList.add('mx-2');
+                thumb.src = CONST.API_CDN + product.picture;
                 
                 const inputId = document.createElement('input');
                 inputId.name = CONST.PRODUCT.id;
@@ -107,6 +112,7 @@ const ProductTab = {
                 deleteButton.classList.add('btn', 'btn-danger', 'mx-2');
                 deleteButton.addEventListener('click', async (event) => { await ProductTab.deleteProduct(event, product.id) } );
                 
+                form.appendChild(thumb);
                 form.appendChild(inputId);
                 form.appendChild(inputName);
                 form.appendChild(inputPicture);
@@ -150,41 +156,30 @@ const ProductTab = {
         const form = document.querySelector(ProductTab.createFormId);
         
         try {
-
+            const formData = new FormData(form)
             event.preventDefault();            
 
             disableFormButtons(form);
-            
-            const data = {
-
-                name : form.elements[CONST.PRODUCT.name].value,
-
-                // .split('\\').pop() est temporaire car on simule le fichier en utilisant son nom
-                picture : form.elements[CONST.PRODUCT.picture].value.split('\\').pop(),
-
-                price : form.elements[CONST.PRODUCT.price].value
-
-            };
 
             let valid = true;
             let invalidFieldIds = []
             // Valider les données avant l'appel à l'API
-            if (data.name.trim() == "") {
+            if (formData.get(CONST.PRODUCT.name)?.trim() == "") {
                 invalidFieldIds.push(form.elements[CONST.PRODUCT.name].id)
                 valid = false
             }              
-            if (data.picture.trim() == "") {
+            if (formData.get(CONST.PRODUCT.picture) === null) {
                 invalidFieldIds.push(form.elements[CONST.PRODUCT.picture].id)
                 valid = false
             }
-            if (data.price.trim() == "" || isNaN(data.price)) {
+            if (formData.get(CONST.PRODUCT.price).trim() == "" || isNaN(formData.get(CONST.PRODUCT.price))) {
                 invalidFieldIds.push(form.elements[CONST.PRODUCT.price].id)
                 valid = false
-            }
-
-            form.reset();           
+            }                       
             
-            if (valid) {               
+            console.log("client side valid", valid)
+
+            if (valid) {                         
                 let text, success
                 // Créer le produit
                 const res = await fetch(
@@ -192,9 +187,9 @@ const ProductTab = {
                     {
                         method: CONST.ROUTES.createProduct.method,
                         headers: {
-                            [CONST.HEADER.contentType]: CONST.CONTENT_TYPE.applicationJson
+                            [CONST.HEADER.XApiKey]: CONST.API_KEY,
                         },
-                        body: JSON.stringify(data)
+                        body: formData
                     }
                 )
                 
@@ -216,10 +211,24 @@ const ProductTab = {
                         break;
                     case CONST.HTTP_STATUS.ServiceUnavailable:
                         text = CONST.TEXT.ServiceUnavailable
+                        success = false
+                        break;
+                    case CONST.HTTP_STATUS.ContentTooLarge:
+                        text = CONST.TEXT.contentTooLarge
+                        success = false
+                        break;
+                    case CONST.HTTP_STATUS.UnsupportedMedia:
+                        text = CONST.TEXT.unsupportedMediaType
+                        success = false
                         break;
                     default:
                         text = CONST.TEXT.errorOccurred
                         success = false
+                        break;                    
+                }
+
+                if (success) {
+                    form.reset();
                 }
 
                 displayGlobalMessage(ProductTab.globalMessageId, text, success);
@@ -230,13 +239,12 @@ const ProductTab = {
             displayGlobalMessage(ProductTab.globalMessageId, CONST.TEXT.fieldsMissingValuesInvalid, valid);
             
             // Remplir les fields correct
-            for (const key of Object.keys(data)) {
-                const value = data[key]
-                let el = form.elements[key]
+            for (const [name, value] of formData.entries()) {
+                const el = form.elements[name]
 
                 if (!el) continue // no matching field, avoid a different crash
 
-                if (invalidFieldIds.includes(key)) {
+                if (invalidFieldIds.includes(el.id)) {
                     el.classList.add('errored-field')
                     continue
                 }
@@ -249,7 +257,7 @@ const ProductTab = {
                 el.value = value
             }
             // focus le premier field erroné            
-            form.elements[invalidFieldIds[0]].focus()
+            document.getElementById(invalidFieldIds[0])?.focus()
 
         } catch (error) {
             displayGlobalMessage(ProductTab.globalMessageId, CONST.TEXT.errorOccurred, false)
@@ -265,77 +273,164 @@ const ProductTab = {
     // Enregistrer la modification du produit par appel API
     saveProduct : async (event, id) => {
 
-        try {
+	try {
 
-            event.preventDefault();
-            // console.log('Save: ' + id);
+		event.preventDefault();
+		// console.log('Save: ' + id);
 
-            const form = event.target.parentElement;
-            
-            disableFormButtons(form);
+		const form = event.target.parentElement;
+		
+		disableFormButtons(form);
 
-            const data = {
+		const thumb = form.querySelector('img[name="thumb"]');
+		const nameInput = form.elements[CONST.PRODUCT.name];
+		const pictureInput = form.elements[CONST.PRODUCT.picture];
+		const priceInput = form.elements[CONST.PRODUCT.price];
 
-                name : form.elements[CONST.PRODUCT.name].value,
+        // On va obtenir la valeur des champs
+        
+        const formData = new FormData()
 
-                // .split('\\').pop() est temporaire car onsimule le fichier en utilisant son nom
-                picture : form.elements[CONST.PRODUCT.picture].value.split('\\').pop(),
+		const data = {
 
-                price : form.elements[CONST.PRODUCT.price].value
+			name : nameInput.value,
 
-            };
+			// .split('\\').pop() est temporaire car onsimule le fichier en utilisant son nom
+			picture : pictureInput.files[0],
 
-            console.log(data);
-            
-            // Normalement ici on devrait valider les données avant l'appel à l'API
+			price : priceInput.value
 
-            // === Compléter la suite de la fonction ===
+        };
+        
+        console.log({ data }, {nameInput, pictureInput, priceInput })
 
-            // Appel API PUT ou PATCH ?
+		// On va ajouter ceux qui ont changés
+        if (data.name !== nameInput.dataset.name)
+            formData.append('name', data.name);
 
-            // Supposons un succès pour tester la suite
-            const response = {};
-            response.status = 200;
+        if (data.picture && data.picture.name !== pictureInput.dataset.picture) {
+			formData.append('picture', data.picture);
+		}
 
-            switch (response.status) {
+        if (data.price !== priceInput.dataset.price)
+            formData.append('price', data.price);
 
-                case CONST.HTTP_STATUS.OK:
-                
-                    form.elements[CONST.PRODUCT.name].dataset.name = data.name;
+		console.log(formData);
+				   
+		// Normalement ici on devrait valider les données avant l'appel à l'API
 
-                    form.elements[CONST.PRODUCT.picture].dataset.picture = data.picture;
-                    form.elements[CONST.PRODUCT.picture].title = data.picture;
-                    form.elements[CONST.PRODUCT.picture].value = '';
+        const dataCount = Array.from(formData.keys()).length
+		// Nous n'avons aucune nouvelle donnée, on quitte la fonction
+		if (dataCount === 0) {
+            disableFormButtons(form,false);
+            return;
+        }            
 
-                    form.elements[CONST.PRODUCT.price].dataset.price = data.price;                      
+        console.log({dataCount})
+        
+        let route;
+        if (dataCount === 3) {
+            route = CONST.ROUTES.updateProduct
+        } else
+            route = CONST.ROUTES.modifyProduct
+        
+        let response = await fetch(CONST.HOST + route.route + id, {
+            method: route.method,
+            headers: {
+                [CONST.HEADER.XApiKey]: CONST.API_KEY
+            },
+            body: formData
+        });
 
-                    displayGlobalMessage(ProductTab.globalMessageId, CONST.TEXT.productSaved, true);
+        let text, success;
+		
+		switch (response.status) {
+			
+			case CONST.HTTP_STATUS.NoContent:
+                console.log("No content", data)
+				if (formData.has("name")) {
 
-                    break;
+					nameInput.dataset.name = nameInput.value;
 
-                case CONST.HTTP_STATUS.NotFound:
-                
-                    displayGlobalMessage(ProductTab.globalMessageId, CONST.TEXT.productNotExists, false);
+				}
 
-                    break;
+				if (formData.has("picture")) {
+					
+					const value = pictureInput.value.split('\\').pop();
 
-                default :
-                
-                    displayGlobalMessage(ProductTab.globalMessageId, CONST.TEXT.errorOccurred, false);
+					pictureInput.dataset.picture = value;
+					pictureInput.title = value;
+					pictureInput.value = '';
 
-                    break;
-            }
+					thumb.src = CONST.API_CDN + value;
 
-            disableFormButtons(form, false);
+				}
 
-        } catch (error) {
+				if (formData.has("price")) {
 
-            // pour le moment on ne va qu'afficher l'erreur
-            console.log(error.message);
+					priceInput.dataset.price = priceInput.value; 
 
-        } 
+				}
+				
+                text = CONST.TEXT.productSaved;
+                success = true;
+				
+				break;			
+            case CONST.HTTP_STATUS.ContentTooLarge:
+                text = CONST.TEXT.contentTooLarge
+                success = false;
+                break;
+            case CONST.HTTP_STATUS.UnsupportedMedia:
+                text = CONST.TEXT.unsupportedMediaType;
+                success = false
+                break;
+            case CONST.HTTP_STATUS.BadRequest:
+                text = CONST.TEXT.fieldsMissingValuesInvalid;
+                success = false
+                break;
+            case CONST.HTTP_STATUS.Conflict:
+                text = CONST.TEXT.productNameAlreadyExists;
+                success = false;
+                break;
+            case CONST.HTTP_STATUS.NotFound:
+                text = CONST.TEXT.productNotExists;
+                success = false;
+                break;
+            case CONST.HTTP_STATUS.InternalServerError:
+                text = CONST.TEXT.internalServerError;
+                success = false;
+                break;
+            case CONST.HTTP_STATUS.Forbidden:
+                text = CONST.TEXT.Forbidden;
+                success = false;
+                break;
+            case CONST.HTTP_STATUS.Unauthorized:
+                text = CONST.TEXT.Unauthorized;
+                success = false;
+                break;
+            case CONST.HTTP_STATUS.InternalServerError:
+                text = CONST.TEXT.errorOccurred
+                success = false;
+                break;
+            default:
+                text = CONST.TEXT.errorOccurred
+                success = false;
+                break;
+        }
 
-    },
+        
+        displayGlobalMessage(ProductTab.globalMessageId, text, success)
+        
+		disableFormButtons(form, false);
+
+	} catch (error) {
+
+		// pour le moment on ne va qu'afficher l'erreur
+		console.log(error.message);
+
+    }
+
+},
     
     // Remettre les valeurs originales du produit grâce à "dataset"
     resetProduct : async (event) => {
@@ -369,11 +464,12 @@ const ProductTab = {
 
             // Appel API
             const res = await fetch(
-                CONST.HOST + CONST.ROUTES.deleteProduct.route + `/${id}`,
+                CONST.HOST + CONST.ROUTES.deleteProduct.route + id,
                 {
                     method: CONST.ROUTES.deleteProduct.method,
                     headers: {
-                        [CONST.HEADER.contentType]: CONST.CONTENT_TYPE.applicationJson
+                        [CONST.HEADER.contentType]: CONST.CONTENT_TYPE.applicationJson,
+                        [CONST.HEADER.XApiKey]: CONST.API_KEY
                     }                    
                 }
             )
